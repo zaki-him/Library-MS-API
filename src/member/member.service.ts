@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Member } from './entities/member.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MemberService {
+
+  constructor(@InjectRepository(Member) private memberRepositpory: Repository<Member>) {}
   create(createMemberDto: CreateMemberDto) {
     return 'This action adds a new member';
   }
@@ -14,6 +19,12 @@ export class MemberService {
 
   findOne(id: number) {
     return `This action returns a #${id} member`;
+  }
+
+  async findOneByEmail(email:string) {
+    return await this.memberRepositpory.findOne({
+      where: { email }
+    })
   }
 
   update(id: number, updateMemberDto: UpdateMemberDto) {
