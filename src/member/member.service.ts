@@ -7,8 +7,11 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class MemberService {
+  constructor(
+    @InjectRepository(Member)
+    private readonly memberRepository: Repository<Member>,
+  ) {}
 
-  constructor(@InjectRepository(Member) private memberRepositpory: Repository<Member>) {}
   create(createMemberDto: CreateMemberDto) {
     return 'This action adds a new member';
   }
@@ -21,10 +24,10 @@ export class MemberService {
     return `This action returns a #${id} member`;
   }
 
-  async findOneByEmail(email:string) {
-    return await this.memberRepositpory.findOne({
-      where: { email }
-    })
+  async findOneByEmail(email: string) {
+    return await this.memberRepository.findOne({
+      where: { email },
+    });
   }
 
   update(id: number, updateMemberDto: UpdateMemberDto) {
