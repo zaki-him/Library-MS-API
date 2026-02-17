@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,8 +12,15 @@ export class MemberService {
     private readonly memberRepository: Repository<Member>,
   ) {}
 
-  create(createMemberDto: CreateMemberDto) {
-    return 'This action adds a new member';
+  async create(createMemberDto: CreateMemberDto) {
+    const { name, email, password } = createMemberDto;
+    const exists = await this.memberRepository.findOne({
+      where: { email },
+    })
+
+    if (exists) {
+      throw new BadRequestException('Email already in use');
+    }
   }
 
   findAll() {

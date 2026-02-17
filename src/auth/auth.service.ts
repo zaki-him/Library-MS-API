@@ -4,9 +4,9 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private memberservice: MemberService) {}
+  constructor(private memberService: MemberService) {}
   async validateMember(email: string, password: string) {
-    const member = await this.memberservice.findOneByEmail(email)
+    const member = await this.memberService.findOneByEmail(email)
 
     if(!member) throw new NotFoundException('Member not found')
 
@@ -23,5 +23,24 @@ export class AuthService {
     }
 
     return validatedMember
+  }
+
+  async registerMember(name: string, email: string, password: string) {
+    const existingMember = await this.memberService.findOneByEmail(email)
+
+    if(existingMember) throw new BadRequestException('Email already in use')
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const newMember = await this.memberService.create({
+      name, email, password: hashedPassword
+    })
+
+    return {
+      id: newMember.id,
+      name: newMember.name,
+      email: newMember.email,
+      createdAt: newMember.createdAt,
+      updatedAt: newMember.updatedAt
+    }
   }
 }
