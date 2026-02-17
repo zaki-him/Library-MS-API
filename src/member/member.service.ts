@@ -4,6 +4,7 @@ import { UpdateMemberDto } from './dto/update-member.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Member } from './entities/member.entity';
 import { Repository } from 'typeorm';
+import bcrypt from 'bcrypt'
 
 @Injectable()
 export class MemberService {
@@ -21,6 +22,19 @@ export class MemberService {
     if (exists) {
       throw new BadRequestException('Email already in use');
     }
+
+    const hashedPass = await bcrypt.hash(password, 10)
+
+    const newMember = this.memberRepository.create({
+      name,
+      email,
+      password: hashedPass,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+    await this.memberRepository.save(newMember)
+
+    return { ...newMember, password: undefined}
   }
 
   findAll() {

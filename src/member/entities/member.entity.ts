@@ -1,4 +1,5 @@
 import { BaseEntity } from 'src/lib/base.entity';
+import { MemberStatus } from 'src/lib/enums/member.enum';
 import { Column, CreateDateColumn, Entity } from 'typeorm';
 
 @Entity()
@@ -12,9 +13,12 @@ export class Member extends BaseEntity {
   @Column('varchar', { length: 128 })
   password: string;
 
-  @CreateDateColumn({ name: 'created_at', type: 'time with time zone' })
+  @Column('enum', { enum: MemberStatus, default: MemberStatus.ACTIVE })
+  status: MemberStatus
+
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
-  @CreateDateColumn({ name: 'updated_at', type: 'time with time zone' })
+  @CreateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 }
