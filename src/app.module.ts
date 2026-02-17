@@ -5,6 +5,7 @@ import { MemberModule } from './member/member.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { BookModule } from './book/book.module';
 import dbConfig from './config/db.config';
 
 @Module({
@@ -19,6 +20,7 @@ import dbConfig from './config/db.config';
       useFactory: dbConfig,
     }),
     AuthModule,
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
