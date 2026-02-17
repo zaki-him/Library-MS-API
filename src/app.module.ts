@@ -7,11 +7,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import dbConfig from './config/db.config';
 
 @Module({
-  imports: [MemberModule, ConfigModule.forRoot({
-    isGlobal: true,
-  }), TypeOrmModule.forRootAsync({
-    useFactory: dbConfig
-  })],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      expandVariables: true,
+      load: [dbConfig]
+    }),
+    MemberModule,
+    TypeOrmModule.forRootAsync({
+      useFactory: dbConfig,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

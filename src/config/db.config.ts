@@ -1,10 +1,14 @@
-import path from "path";
-import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions.js";
+import path from 'path';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions.js';
 
-export default (): PostgresConnectionOptions => ({
-  type: 'postgres',
-  url: process.env.DATABASE_URL,
-  port: parseInt(process.env.PORT!, 10),
-  entities: [path.relative(__dirname, '/**/*.entity{.ts,.js}')],
-  synchronize: true, // set to false in production
-})
+export default (): PostgresConnectionOptions => {
+  return {
+    type: 'postgres',
+    url: process.env.DATABASE_URL,
+    entities: [path.join(__dirname, '../**/*.entity.{ts,js}')],
+    synchronize: process.env.NODE_ENV !== 'production',
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  };
+};
