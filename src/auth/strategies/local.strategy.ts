@@ -12,4 +12,8 @@ export class LocalStartegy extends PassportStrategy(Strategy){
   async validate(email:string, password: string) {
     return await this.authService.validateMember(email, password)
   }
+
+  async register(name: string, email: string, password: string){
+    return await this.authService.registerMember(name, email, password)
+  }
 }
