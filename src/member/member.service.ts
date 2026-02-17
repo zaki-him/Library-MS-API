@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -38,11 +38,13 @@ export class MemberService {
   }
 
   findAll() {
-    return `This action returns all member`;
+    return this.memberRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} member`;
+  findOne(id: string) {
+    return this.memberRepository.findOne({
+      where: { id }
+    });
   }
 
   async findOneByEmail(email: string) {
@@ -51,11 +53,34 @@ export class MemberService {
     });
   }
 
-  update(id: number, updateMemberDto: UpdateMemberDto) {
-    return `This action updates a #${id} member`;
+  async update(id: string, updateMemberDto: UpdateMemberDto) {
+    const member = await this.memberRepository.findOne({
+      where: {id}
+    })
+
+    if(!member){
+      throw new NotFoundException('Member Not Found')
+    }
+
+    if(updateMemberDto.email && updateMemberDto.email != member.email){
+      const exists = await this.findOneByEmail(updateMemberDto.email)
+      if(exists) throw new BadRequestException('Email already in use')
+    }
+
+    const payload: Partial<Member> = { ...updateMemberDto, updatedAt: new Date() }
+
+    if(updateMemberDto.password){
+      payload.password = await bcrypt.hash(updateMemberDto.password, 10)
+    }
+
+    await this.memberRepository.update(id, payload)
+    const updated = await this.findOne(id)
+    return { ...updated, password: undefined }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} member`;
+  remove(id: string) {
+    const member = this.findOne(id)
+    if(!member) throw new NotFoundException('Member Not Found')
+    return this.memberRepository.delete(id)
   }
 }
