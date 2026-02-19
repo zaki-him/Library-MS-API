@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { BookModule } from './book/book.module';
+import { AuthorModule } from './author/author.module';
 import dbConfig from './config/db.config';
 
 @Module({
@@ -21,6 +22,7 @@ import dbConfig from './config/db.config';
     }),
     AuthModule,
     BookModule,
+    AuthorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

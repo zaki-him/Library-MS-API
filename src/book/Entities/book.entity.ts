@@ -1,6 +1,7 @@
 import { BaseEntity } from "src/lib/base.entity";
 import { BookCategory } from "src/lib/enums/book.enum";
-import { Column, CreateDateColumn, Entity } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany } from "typeorm";
+import { BookAuthor } from "./book-author.entity";
 
 @Entity()
 export class Book extends BaseEntity{
@@ -12,4 +13,10 @@ export class Book extends BaseEntity{
 
   @Column("enum", { enum: BookCategory })
   category: BookCategory
+
+  @Column({ type: "date" })
+  publication_date: Date
+
+  @OneToMany(() => BookAuthor, bookAuthor => bookAuthor.book)
+  book_authors: BookAuthor[]
 }
