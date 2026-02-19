@@ -19,4 +19,8 @@ export class BookService {
       where: { id }
     })
   }
+
+  async create() {
+    
+  }
 }
