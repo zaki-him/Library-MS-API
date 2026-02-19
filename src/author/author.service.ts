@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AuthorService {}
+export class AuthorService {
+  constructor() {}
+  async getAll() {
+    
+  }
+}
