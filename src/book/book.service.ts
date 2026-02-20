@@ -27,7 +27,7 @@ export class BookService {
   }
 
   async create(createBookDto: CreateBookDto) {
-    const { title, category, copies_owned, publication_date } = createBookDto
+    const { title, category, copiesOwned, publicationDate } = createBookDto
     const book = await this.bookRepository.findOne({
       where: { title }
     })
@@ -39,8 +39,8 @@ export class BookService {
     const newBook = this.bookRepository.create({
       title,
       category,
-      copies_owned,
-      publication_date
+      copies_owned: copiesOwned,
+      publication_date: publicationDate
     })
 
     await this.bookRepository.save(newBook)

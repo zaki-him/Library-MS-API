@@ -14,8 +14,13 @@ export class Book extends BaseEntity{
   @Column("enum", { enum: BookCategory })
   category: BookCategory
 
-  @Column({ type: "date" })
-  publication_date: Date
+  @Column({ type: "date",
+    transformer: {
+      to: (value: string) => value,
+      from: (value: string) => value,
+    },
+  })
+  publication_date: string
 
   @OneToMany(() => BookAuthor, bookAuthor => bookAuthor.book)
   book_authors: BookAuthor[]

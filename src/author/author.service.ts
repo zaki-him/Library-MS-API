@@ -10,18 +10,18 @@ export class AuthorService {
     @InjectRepository(Author)
     private authorrepository: Repository<Author>
   ) {}
-  async resolveAuthor(createAuthordto: CreateAuthorDto) {
+  async resolveAuthor(createAuthorDto: CreateAuthorDto) {
     let author = await this.authorrepository.findOne({
       where: {
-        first_name: createAuthordto.first_name,
-        last_name: createAuthordto.last_name
+        first_name: createAuthorDto.firstName,
+        last_name: createAuthorDto.lastName
       }
     })
 
     if(!author){
       author = await this.authorrepository.save(this.authorrepository.create({
-        last_name: createAuthordto.last_name,
-        first_name: createAuthordto.first_name
+        last_name: createAuthorDto.lastName,
+        first_name: createAuthorDto.firstName
       }))
     }
 
