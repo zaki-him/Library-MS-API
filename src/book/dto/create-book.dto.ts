@@ -4,4 +4,5 @@ export class CreateBookDto {
   title: string
   category: BookCategory
   copies_owned?: number
+  publication_date: Date
 }

@@ -8,7 +8,7 @@ export class Book extends BaseEntity{
   @Column("varchar", { length: 90 })
   title: string
 
-  @Column()
+  @Column("integer", { default: 1 })
   copies_owned: number
 
   @Column("enum", { enum: BookCategory })
