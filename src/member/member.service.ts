@@ -37,12 +37,12 @@ export class MemberService {
     return { ...newMember, password: undefined}
   }
 
-  findAll() {
-    return this.memberRepository.find();
+  async findAll() {
+    return await this.memberRepository.find();
   }
 
-  findOne(id: string) {
-    return this.memberRepository.findOne({
+  async findOne(id: string) {
+    return await this.memberRepository.findOne({
       where: { id }
     });
   }

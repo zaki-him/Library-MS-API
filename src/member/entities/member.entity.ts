@@ -15,10 +15,4 @@ export class Member extends BaseEntity {
 
   @Column('enum', { enum: MemberStatus, default: MemberStatus.ACTIVE })
   status: MemberStatus
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-  createdAt: Date;
-
-  @CreateDateColumn({ name: 'updated_at', type: 'timestamptz' })
-  updatedAt: Date;
 }
